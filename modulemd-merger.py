@@ -38,6 +38,11 @@ def merge():
     return Modulemd.dumps(merged_objects)
 
 
+@app.route('/healthcheck', methods=["GET"])
+def healthcheck():
+    return "OK"
+
+
 def validate(data):
     """ Validation, to give some human readable error messages back. """
     if not data:
