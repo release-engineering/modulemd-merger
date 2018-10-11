@@ -5,8 +5,7 @@ LABEL \
     license="GPLv2+" \
     build-date=""
 
-RUN dnf -y install \
-    --enablerepo=updates-testing \
+RUN dnf -y update && dnf -y install \
     python3-gunicorn \
     python3-flask \
     python3-modulemd \
