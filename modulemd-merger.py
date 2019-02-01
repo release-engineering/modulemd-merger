@@ -3,7 +3,7 @@ import traceback
 import flask
 import werkzeug.exceptions as exc
 import gi
-gi.require_version('Modulemd', '1.0')
+gi.require_version('Modulemd', '2.0')
 from gi.repository import Modulemd  # noqa
 
 app = flask.Flask('modulemd-merger')
@@ -28,14 +28,15 @@ def merge():
 
     validate(data)
 
-    prioritizer = Modulemd.Prioritizer()
+    merger = Modulemd.ModuleIndexMerger.new()
     for entry in data['documents']:
-        objects = Modulemd.objects_from_string(entry['modulemd'])
+        index = Modulemd.ModuleIndex.new()
+        index.update_from_string(entry['modulemd'], True)
         priority = entry.get('priority', 0)
-        prioritizer.add(objects, priority)
+        merger.associate_index(index, priority)
 
-    merged_objects = prioritizer.resolve()
-    return Modulemd.dumps(merged_objects)
+    merged_index = merger.resolve()
+    return merged_index.dump_to_string()
 
 
 @app.route('/healthcheck', methods=["GET"])
