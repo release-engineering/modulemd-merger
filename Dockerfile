@@ -8,7 +8,7 @@ LABEL \
 RUN dnf -y update && dnf -y install \
     python3-gunicorn \
     python3-flask \
-    python3-modulemd \
+    python3-libmodulemd \
     && dnf -y clean all
 
 COPY modulemd-merger.py .
